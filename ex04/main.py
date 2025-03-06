@@ -67,17 +67,19 @@ while (1==1):
             qlsv.showSinhVien(qlsv.getListSinhVien())
         else:
             print("\nDanh sách sinh viên trống!")
-    
+
     elif (key == 7):
         if (qlsv.soluongSinhVien() > 0):
             print("\n7. Hiển thị danh sách sinh viên")
-            qlsv.showSinhVien(qlsv.getListSinhVien())
+            danhSach = qlsv.getListSinhVien()
+            print("Danh sách sinh viên hiện tại:", danhSach)  # In ra danh sách sinh viên để kiểm tra
+            qlsv.showSinhVien(danhSach)
         else:
             print("\nDanh sách sinh viên trống!")
     
     elif key == 0:
         print("\nBạn đã chọn thoát chương trình")
-        break
+        
     
     else:
         print("\nKhông có chức năng này!")

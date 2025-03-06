@@ -1,4 +1,3 @@
-
 from SinhVien import SinhVien
 
 class QuanLySinhVien:
@@ -15,7 +14,7 @@ class QuanLySinhVien:
         return maxId   
     
     def soluongSinhVien(self):
-        return self.listSinhVien.__len__()
+        return len(self.listSinhVien)
 
     def nhapSinhVien(self):
         svId = self.generateID()
@@ -28,8 +27,8 @@ class QuanLySinhVien:
         self.listSinhVien.append(sv)
         
     def updateSinhVien(self, ID):
-        sv : SinhVien = self.findByID(ID)
-        if (sv!=None):
+        sv = self.findByID(ID)
+        if sv is not None:
             name = input("Nhap ten sinh vien: ")
             sex = input("Nhap gioi tinh sinh vien: ")
             major = input("Nhap chuyen nganh cua sinh vien: ")
@@ -40,7 +39,7 @@ class QuanLySinhVien:
             sv._diemTB = diemTB
             self.xepLoaiHocLuc(sv)
         else:
-            print("Sinh vien co ID = {} khong ton tai",.format(ID))
+            print("Sinh vien co ID = {} khong ton tai".format(ID))
 
     def sortByID(self):
         self.listSinhVien.sort(key=lambda x: x._id, reverse=False)
@@ -52,35 +51,34 @@ class QuanLySinhVien:
         self.listSinhVien.sort(key=lambda x: x._diemTB, reverse=False)
 
     def findByID(self, ID):
-        searchResult = None
-        if (self.soluongSinhVien() > 0):
+        if self.soluongSinhVien() > 0:
             for sv in self.listSinhVien:
-                if (sv._id == ID):
-                    searchResult = sv
-                return searchResult
+                if sv._id == ID:
+                    return sv
+        return None
 
     def findByName(self, keyword):
         listSV = []
-        if (self.soluongSinhVien() > 0):
+        if self.soluongSinhVien() > 0:
             for sv in self.listSinhVien:
-                if (keyword.upper() in sv._name.upper()):
+                if keyword.upper() in sv._name.upper():
                     listSV.append(sv)
-                return listSV
+        return listSV
     
     def deleteById(self, ID):
         isDeleted = False
         sv = self.findByID(ID)
-        if (sv != None):
+        if sv is not None:
             self.listSinhVien.remove(sv)
             isDeleted = True
         return isDeleted
 
     def xepLoaiHocLuc(self, sv: SinhVien):
-        if (sv._diemTB >= 8):
+        if sv._diemTB >= 8:
             sv._hocLuc = "Gioi"
-        elif (sv._diemTB >= 6.5):
+        elif sv._diemTB >= 6.5:
             sv._hocLuc = "Kha"
-        elif (sv._diemTB >= 5):
+        elif sv._diemTB >= 5:
             sv._hocLuc = "Trung binh"
         else:
             sv._hocLuc = "Yeu"
@@ -88,13 +86,14 @@ class QuanLySinhVien:
     def showSinhVien(self, listSV):
         print("{:<8} {:<18} {:<8} {:<8} {:<8} {:<8}"
               .format("ID", "Name", "Sex", "Major", "Diem TB", "Hoc Luc"))
-        if (listSV.__len__() > 0):
+        if len(listSV) > 0:
             for sv in listSV:
                 print("{:<8} {:<18} {:<8} {:<8} {:<8} {:<8}"
                       .format(sv._id, sv._name, sv._sex, sv._major,
                               sv._diemTB, sv._hocLuc))
             print("\n")
+        else:
+            print("Danh sách sinh viên trống!")
 
     def getListSinhVien(self):
         return self.listSinhVien
-    
