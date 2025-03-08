@@ -1,6 +1,4 @@
 class PlayFairCipher:
-    def __init__(self) -> None:
-        pass
     def __init__(self):
         pass
     def create_playfair_matrix(self, key):
@@ -25,53 +23,50 @@ class PlayFairCipher:
                     return row, col
 
     def playfair_encrypt(self, plain_text, matrix):
-        plain_text = plain_text.replace("j", "I")
-        plain_text =plain_text.upper()
-        encrypted_text =""
+        plain_text = plain_text.replace("J", "I").upper()
+        encrypted_text = ""
+
         for i in range(0, len(plain_text), 2):
             pair = plain_text[i:i+2]
-            if len(pair)==1:
+            if len(pair) == 1:
                 pair += "X"
             row1, col1 = self.find_letter_coords(matrix, pair[0])
             row2, col2 = self.find_letter_coords(matrix, pair[1])
+
             if row1 == row2:
-                encrypted_text += matrix[row1][(col1 +1)%5]+matrix[row2][(col2 +1)%5]
-            elif col1 ==col2:
-                encrypted_text += matrix[(row1 +1)%5][col1]+matrix[(row2+1)%5][col2]
-            else:
-                encrypted_text += matrix[row1][col2]+ matrix[row2][col1]
-                return encrypted_text
-    
-    def playfair_decrypt (self, plain_text, matrix):
-        cipher_text = cipher_text.upper()
-        decrypted_text =""
-        decrypted_text1 = ""
-
-        for i in range (0, len(cipher_text), 2):
-            pair = cipher_text[i:i+2]
-            row1, col1 =self.find_letter_coords(matrix, pair[0])
-            row2, col2 =self.find_letter_coords(matrix, pair[1])
-
-            if row2 == row2:
-                decrypted_text +=matrix[row1][(col1-1)%5]+matrix[row2][(col2 -1)%5]
+                encrypted_text += matrix[row1][(col1 + 1) % 5] + matrix[row2][(col2 + 1) % 5]
             elif col1 == col2:
-                decrypted_text += matrix[(row1 -1)%5][col1]+matrix[row2][(col2-1)%5]
+                encrypted_text += matrix[(row1 + 1) % 5][col1] + matrix[(row2 + 1) % 5][col2]
             else:
-                decrypted_text += matrix[row1][col2]+ matrix[row2][col1]
-                
-            banro = ""
+                encrypted_text += matrix[row1][col2] + matrix[row2][col1]
 
+        return encrypted_text  # ✅ Đưa return ra ngoài vòng lặp
 
-        for i in range(0, len(decrypted_text) - 1, 2):
-            if i + 2 < len(decrypted_text) and decrypted_text[i] == decrypted_text[i + 2]:
-                banro += decrypted_text[i]
+    
+    def playfair_decrypt(self, cipher_text, matrix):
+        cipher_text = cipher_text.upper()
+        decrypted_text = ""
+
+        for i in range(0, len(cipher_text), 2):
+            pair = cipher_text[i:i+2]
+            row1, col1 = self.find_letter_coords(matrix, pair[0])
+            row2, col2 = self.find_letter_coords(matrix, pair[1])
+
+            if row1 == row2:
+                decrypted_text += matrix[row1][(col1 - 1) % 5] + matrix[row2][(col2 - 1) % 5]
+            elif col1 == col2:
+                decrypted_text += matrix[(row1 - 1) % 5][col1] + matrix[(row2 - 1) % 5][col2]
             else:
-                banro += decrypted_text[i] + decrypted_text[i + 1]
+                decrypted_text += matrix[row1][col2] + matrix[row2][col1]
 
-        if decrypted_text[-1] == "X":
-            banro += decrypted_text[-2]
-        else:
-            banro += decrypted_text[-2]
-            banro += decrypted_text[-1]
+        # ✅ Hậu xử lý để loại bỏ ký tự "X" không mong muốn
+        banro = ""
+        for i in range(len(decrypted_text) - 1):
+            if decrypted_text[i] == "X" and (
+                i == 0 or i == len(decrypted_text) - 1 or decrypted_text[i - 1] != decrypted_text[i + 1]
+            ):
+                continue
+            banro += decrypted_text[i]
 
+        banro += decrypted_text[-1]  # Thêm ký tự cuối cùng nếu chưa được thêm
         return banro
