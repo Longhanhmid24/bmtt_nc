@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
-from .rsa_ui import Ui_MainWindow
+from rsa_ui import Ui_MainWindow
 import requests
 
 
@@ -71,13 +71,13 @@ class MyApp(QMainWindow):
             print("Error: %s" % str(e))
 
     def call_api_signatures(self):
-        url = "http://127.0.0.1:5000/api/rsa/signatures"
+        url = "http://127.0.0.1:5000/api/rsa/sign"
         payload = {"message": self.ui.txt_info.toPlainText()}
         try:
             response = requests.post(url, json=payload)
             if response.status_code == 200:
                 data = response.json()
-                self.ui.txt_signature.setPlainText(data["signatures"])  # Sửa key trả về
+                self.ui.txt_signature.setPlainText(data["signature"]) # Sửa key trả về
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Information)
                 msg.setText("Signature successful")
@@ -91,7 +91,7 @@ class MyApp(QMainWindow):
         url = "http://127.0.0.1:5000/api/rsa/verify"
         payload = {
             "message": self.ui.txt_info.toPlainText(),
-            "signatures": self.ui.txt_signature.toPlainText()
+            "signature": self.ui.txt_signature.toPlainText()  # Sửa key "signatures" -> "signature"
         }
         try:
             response = requests.post(url, json=payload)
@@ -99,10 +99,10 @@ class MyApp(QMainWindow):
                 data = response.json()
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Information)
-                if data["Is_Verified"]:  # Kiểm tra đúng key trả về từ API
+                if data["is_verified"]:  # Đúng key JSON
                     msg.setText("Signature Verified")
                 else:
-                    msg.setText("Signature Verification Failed")
+                    msg.setText("Verify Thành Công")
                 msg.exec_()
             else:
                 print("Error while calling API")
