@@ -102,7 +102,7 @@ class MyApp(QMainWindow):
                 if data["is_verified"]:  # Đúng key JSON
                     msg.setText("Signature Verified")
                 else:
-                    msg.setText("Verify Thành Công")
+                    msg.setText("Verify fail")
                 msg.exec_()
             else:
                 print("Error while calling API")
